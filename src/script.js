@@ -8,7 +8,7 @@ $(document).ready(function () {
             return false;
         } else {
             $.ajax({
-                url: "php/submit_form.php",
+                url: "php/submit.php",
                 type: "post",
                 data: $(this).serialize(),
                 success: function (response) {
