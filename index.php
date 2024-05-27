@@ -13,7 +13,8 @@
 
 <body>
     <div class="bodyContainer">
-        <form id="contactForm" action="php/submit.php" method="post">
+        <!-- <form id="contactForm" action="php/submit.php" method="post"> -->
+        <form id="contactForm" method="post">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
             <label for="telephone">Telephone:</label>
@@ -36,7 +37,7 @@
 
         <div id="customAlert" class="hidden"></div>
 
-        <script src="src/script.js"></script>
+        <!-- <script src="src/script.js"></script> -->
     </div>
 </body>
 

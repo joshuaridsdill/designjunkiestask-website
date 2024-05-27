@@ -20,13 +20,12 @@ $email = $_POST['email'];
 $message = $_POST['message'];
 $ip = $_SERVER['REMOTE_ADDR'];
 $browser = $_SERVER['HTTP_USER_AGENT'];
-$current_time = date("H:i");
+$current_time = time(); // date("H:i");
 $recaptcha = $_POST['g-recaptcha-response']; 
 
 $secret_key = '6LcsHMApAAAAAIpSlilh5N3PJ6KsCdveL4alyycH'; 
   
-// Hitting request to the URL, Google will 
-// respond with success or error scenario 
+// Hitting request to the URL, Google will respond with success or error scenario 
 $url = 'https://www.google.com/recaptcha/api/siteverify?secret='
         . $secret_key . '&response=' . $recaptcha; 
   
@@ -46,9 +45,9 @@ if ($response->success == true) {
 } 
 
 // Determine priority status
-if ($current_time >= '09:00' && $current_time <= '16:30') {
+if ($current_time >= strtotime('today 9:00 AM') && $current_time <= strtotime('today 4:30 PM')) {
     $priority_status = "SAME_DAY";
-} elseif ($current_time > '16:30' && $current_time < '17:30') {
+} elseif ($current_time > strtotime('today 4:30 PM') && $current_time < strtotime('today 5:30 PM')) {
     $priority_status = "MORNING_REPLY";
 } else {
     $priority_status = "DEFAULT";
@@ -69,14 +68,14 @@ if (strpos($message, 'http') !== false && str_word_count($message) < 20) {
 $stmt = $conn->prepare("INSERT INTO form_submissions (name, telephone, email, message, ip, browser, priority_status, submission_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 $stmt->bind_param("ssssssss", $name, $telephone, $email, $message, $ip, $browser, $priority_status, $submission_status);
 
-// Execute statement
+// Check to see if form submitted successfully
 if ($stmt->execute()) {
     echo "Form submitted successfully";
-} else {
-    echo "Error: " . $stmt->error;
 }
 
 // Close statement and connection
 $stmt->close();
 $conn->close();
+
+// header("Location: https://" . $_SERVER["HTTP_HOST"] . "/thank-you.php");
 ?>

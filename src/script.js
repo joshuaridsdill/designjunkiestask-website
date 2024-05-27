@@ -13,6 +13,8 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 success: function (response) {
                     showAlert("Form submitted successfully!", 3000);
+                    //window.location.replace("thank-you.php")
+                    replaceElementWithURL("thank-you.php", "body");
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
@@ -23,6 +25,15 @@ $(document).ready(function () {
     });
 });
 
+function replaceElementWithURL(url, element) {
+    $.ajax({
+        url: url,
+        success: function (response) {
+            $(element).html(response);
+        }
+    });
+}
+
 function showAlert(message, duration) {
     var alertElement = document.createElement("div");
     alertElement.classList.add("customAlert");
@@ -32,7 +43,7 @@ function showAlert(message, duration) {
     deleteButton.textContent = "X";
     deleteButton.classList.add("delete-button");
 
-    deleteButton.addEventListener("click", function() {
+    deleteButton.addEventListener("click", function () {
         hideAlert(alertElement);
     });
 
@@ -40,11 +51,13 @@ function showAlert(message, duration) {
 
     document.body.appendChild(alertElement);
 
-    setTimeout(function() {
+    setTimeout(function () {
         hideAlert(alertElement);
     }, duration);
 }
 
 function hideAlert(alertElement) {
-    alertElement.parentNode.removeChild(alertElement);
+    if (alertElement.parentNode != null) {
+        alertElement.parentNode.removeChild(alertElement);
+    }
 }
